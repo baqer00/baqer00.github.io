@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.baqer.badalha",
+        "sha256_cert_fingerprints": ["57:EA:8A:04:A5:5E:0D:32:8D:7C:81:DD:22:38:DC:EA:DC:0B:D8:01:E4:17:E2:5F:F7:54:F4:3E:B5:FA:C7:D7"]
+      }
+    }]
