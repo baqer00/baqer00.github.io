@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بدليها - تسجيل الدخول</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #121212;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: #1e1e1e;
+      padding: 25px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 380px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #333;
+      box-sizing: border-box;
+      font-size: 15px;
+    }
+    input {
+      background: #2a2a2a;
+      color: #fff;
+      text-align: center;
+      direction: ltr;
+    }
+    button {
+      background: #0284c7;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button:hover {
+      background: #0369a1;
+    }
+    .hidden {
+      display: none;
+    }
+    #status {
+      margin-top: 12px;
+      font-size: 14px;
+      color: #38bdf8;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>بدليها</h2>
+
+  <!-- الخطوة 1: إدخال رقم الهاتف -->
+  <div id="phone-step">
+    <p style="font-size: 14px; color: #aaa;">أدخل رقم الهاتف مع رمز الدولة</p>
+    <input type="tel" id="phoneNumber" placeholder="+9647700000000" value="+9647700000000">
+    <div id="recaptcha-container"></div>
+    <button id="send-otp-btn">إرسال رمز التحقق</button>
+  </div>
+
+  <!-- الخطوة 2: إدخال رمز التحقق OTP -->
+  <div id="otp-step" class="hidden">
+    <p style="font-size: 14px; color: #aaa;">أدخل الرمز المكون من 6 أرقام</p>
+    <input type="number" id="otpCode" placeholder="123456">
+    <button id="verify-otp-btn">تأكيد الرمز</button>
+  </div>
+
+  <!-- الخطوة 3: شاشة بعد النجاح -->
+  <div id="user-info" class="hidden">
+    <h3 style="color: #4ade80;">تم تسجيل الدخول بنجاح! 🎉</h3>
+    <p id="user-phone"></p>
+    <button id="logout-btn" style="background: #ef4444;">تسجيل الخروج</button>
+  </div>
+
+  <div id="status"></div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+  // إعدادات مشروعك الخاّصة
+  const firebaseConfig = {
+    apiKey: "AIzaSyCcRPDzPu61SvMczifLNxHg7YCDqr6lZ-k",
+    authDomain: "badliha.firebaseapp.com",
+    projectId: "badliha",
+    storageBucket: "badliha.firebasestorage.app",
+    messagingSenderId: "679423675521",
+    appId: "1:679423675521:web:0820d5c624319ad4f05180"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  auth.languageCode = 'ar';
+
+  let confirmationResult = null;
+
+  // إعداد reCAPTCHA التلقائي الخفي
+  window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+    'size': 'invisible'
+  });
+
+  // المتابعة التلقائية لحالة المستخدم
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.getElementById('phone-step').classList.add('hidden');
+      document.getElementById('otp-step').classList.add('hidden');
+      document.getElementById('user-info').classList.remove('hidden');
+      document.getElementById('user-phone').innerText = "رقم الحساب: " + user.phoneNumber;
+      document.getElementById('status').innerText = "";
+    } else {
+      document.getElementById('phone-step').classList.remove('hidden');
+      document.getElementById('otp-step').classList.add('hidden');
+      document.getElementById('user-info').classList.add('hidden');
+    }
+  });
+
+  // إرسال الرمز
+  document.getElementById('send-otp-btn').addEventListener('click', () => {
+    const phoneNumber = document.getElementById('phoneNumber').value.trim();
+    const statusDiv = document.getElementById('status');
+    
+    if(!phoneNumber) { 
+      statusDiv.innerText = "يرجى إدخال رقم الهاتف"; 
+      return; 
+    }
+    
+    statusDiv.innerText = "جاري إرسال الرمز...";
+
+    signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
+      .then((result) => {
+        confirmationResult = result;
+        statusDiv.innerText = "تم إرسال الرمز بنجاح!";
+        document.getElementById('phone-step').classList.add('hidden');
+        document.getElementById('otp-step').classList.remove('hidden');
+      })
+      .catch((error) => {
+        statusDiv.innerText = "خطأ: " + error.message;
+      });
+  });
+
+  // التأكيد والتحقق
+  document.getElementById('verify-otp-btn').addEventListener('click', () => {
+    const code = document.getElementById('otpCode').value.trim();
+    const statusDiv = document.getElementById('status');
+    
+    if(!code) { 
+      statusDiv.innerText = "أدخل الرمز أولاً"; 
+      return; 
+    }
+    
+    statusDiv.innerText = "جاري التحقق...";
+
+    confirmationResult.confirm(code).then(() => {
+      statusDiv.innerText = "تم التفعيل بنجاح!";
+    }).catch(() => {
+      statusDiv.innerText = "الرمز غير صحيح، حاول مجدداً.";
+    });
+  });
+
+  // تسجيل الخروج
+  document.getElementById('logout-btn').addEventListener('click', () => {
+    signOut(auth);
+  });
+</script>
+
+</body>
+</html>
