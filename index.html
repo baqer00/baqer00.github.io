@@ -3,99 +3,194 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بدليها - تسجيل الدخول</title>
+  <title>بدّلها - تسجيل الدخول</title>
   <style>
+    :root {
+      --bg-color: #12191b;
+      --card-bg: #1a2326;
+      --teal-color: #2db39b;
+      --yellow-color: #f5a623;
+      --text-white: #ffffff;
+      --text-gray: #9ba8ac;
+    }
     body {
       font-family: system-ui, -apple-system, sans-serif;
-      background: #121212;
-      color: #fff;
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      margin: 0;
+      padding: 20px;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      margin: 0;
+      box-sizing: border-box;
     }
-    .card {
-      background: #1e1e1e;
-      padding: 25px;
-      border-radius: 12px;
-      width: 90%;
+    .container {
+      width: 100%;
       max-width: 380px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
       text-align: center;
     }
-    input, button {
+    .top-tag {
+      color: var(--text-gray);
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+    .logo {
+      font-size: 42px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .logo span.yellow { color: var(--yellow-color); }
+    .logo span.teal { color: var(--teal-color); }
+    .sub-title {
+      color: var(--text-gray);
+      font-size: 15px;
+      margin-bottom: 30px;
+    }
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: 0.2s;
+    }
+    .btn-google {
+      background-color: var(--teal-color);
+      color: white;
+    }
+    .btn-phone {
+      background-color: #243135;
+      color: white;
+      border: 1px solid #36484e;
+    }
+    .btn:hover { opacity: 0.9; }
+    
+    .info-card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 20px;
+      text-align: right;
+      border: 1px solid #233034;
+    }
+    .info-card h4 {
+      margin: 0 0 10px 0;
+      font-size: 15px;
+    }
+    .info-card ul {
+      margin: 0;
+      padding-right: 18px;
+      color: var(--text-gray);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .guest-link {
+      display: block;
+      margin-top: 25px;
+      color: var(--teal-color);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* Modal / Form styles for Phone OTP */
+    input {
       width: 100%;
       padding: 12px;
       margin: 10px 0;
       border-radius: 8px;
-      border: 1px solid #333;
-      box-sizing: border-box;
-      font-size: 15px;
-    }
-    input {
-      background: #2a2a2a;
+      border: 1px solid #36484e;
+      background: #202b2e;
       color: #fff;
       text-align: center;
       direction: ltr;
+      box-sizing: border-box;
+      font-size: 15px;
     }
-    button {
-      background: #0284c7;
-      color: white;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    button:hover {
-      background: #0369a1;
-    }
-    .hidden {
-      display: none;
-    }
-    #status {
-      margin-top: 12px;
-      font-size: 14px;
-      color: #38bdf8;
-      word-break: break-word;
-    }
+    .hidden { display: none; }
+    #status { margin-top: 15px; color: var(--teal-color); font-size: 14px; }
   </style>
 </head>
 <body>
 
-<div class="card">
-  <h2>بدليها</h2>
+<div class="container">
+  <div class="top-tag">بيع · شراء · مجاناً</div>
+  
+  <!-- Logo -->
+  <div class="logo">
+    <span class="yellow">بدّ</span><span class="teal">لها</span>
+  </div>
+  <div class="sub-title">سجّل دخولك حتى تنشر وتتواصل بأمان</div>
 
-  <!-- الخطوة 1: إدخال رقم الهاتف -->
-  <div id="phone-step">
-    <p style="font-size: 14px; color: #aaa;">أدخل رقم الهاتف مع رمز الدولة</p>
+  <!-- خيارات تسجيل الدخول -->
+  <div id="auth-options">
+    <button class="btn btn-google" id="google-login-btn">
+      المتابعة مع Google
+    </button>
+    
+    <button class="btn btn-phone" id="show-phone-btn">
+      المتابعة برقم الهاتف 📱
+    </button>
+  </div>
+
+  <!-- نموذج إدخال رقم الهاتف (يظهر عند الضغط على زر الهاتف) -->
+  <div id="phone-form" class="hidden">
     <input type="tel" id="phoneNumber" placeholder="+9647700000000" value="+9647700000000">
     <div id="recaptcha-container"></div>
-    <button id="send-otp-btn">إرسال رمز التحقق</button>
+    <button class="btn btn-google" id="send-otp-btn">إرسال رمز التحقق</button>
+    <button class="btn btn-phone" id="back-btn">إلغاء</button>
   </div>
 
-  <!-- الخطوة 2: إدخال رمز التحقق OTP -->
-  <div id="otp-step" class="hidden">
-    <p style="font-size: 14px; color: #aaa;">أدخل الرمز المكون من 6 أرقام</p>
+  <!-- نموذج إدخال رمز التحقق OTP -->
+  <div id="otp-form" class="hidden">
+    <p style="color: var(--text-gray); font-size: 14px;">أدخل الرمز المكون من 6 أرقام</p>
     <input type="number" id="otpCode" placeholder="123456">
-    <button id="verify-otp-btn">تأكيد الرمز</button>
+    <button class="btn btn-google" id="verify-otp-btn">تأكيد الرمز</button>
   </div>
 
-  <!-- الخطوة 3: شاشة بعد النجاح -->
+  <!-- الشاشة بعد نجاح تسجيل الدخول -->
   <div id="user-info" class="hidden">
     <h3 style="color: #4ade80;">تم تسجيل الدخول بنجاح! 🎉</h3>
-    <p id="user-phone"></p>
-    <button id="logout-btn" style="background: #ef4444;">تسجيل الخروج</button>
+    <p id="user-details" style="color: var(--text-gray);"></p>
+    <button class="btn" style="background:#ef4444; color:white;" id="logout-btn">تسجيل الخروج</button>
   </div>
 
   <div id="status"></div>
+
+  <!-- بطاقة معلومات الحماية -->
+  <div class="info-card">
+    <h4>🛡️ ليش حسابك محمي؟</h4>
+    <ul>
+      <li>ما نخزن كلمات مرور أبداً</li>
+      <li>الدخول عبر حساب Google أو رقم هاتفك ومعهم حمايته</li>
+      <li>كل إعلان مربوط بحساب صاحبه، ولا أحد يقدر يعدله أو يحذفه غيره</li>
+    </ul>
+  </div>
+
+  <a href="#" class="guest-link">تصفّح كزائر</a>
 </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { 
+    getAuth, 
+    GoogleAuthProvider, 
+    signInWithPopup, 
+    RecaptchaVerifier, 
+    signInWithPhoneNumber, 
+    signOut, 
+    onAuthStateChanged 
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-  // إعدادات مشروعك الخاّصة
   const firebaseConfig = {
     apiKey: "AIzaSyCcRPDzPu61SvMczifLNxHg7YCDqr6lZ-k",
     authDomain: "badliha.firebaseapp.com",
@@ -111,73 +206,348 @@
 
   let confirmationResult = null;
 
-  // إعداد reCAPTCHA التلقائي الخفي
   window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
     'size': 'invisible'
   });
 
-  // المتابعة التلقائية لحالة المستخدم
+  // متابعة حالة المستخدم
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      document.getElementById('phone-step').classList.add('hidden');
-      document.getElementById('otp-step').classList.add('hidden');
+      document.getElementById('auth-options').classList.add('hidden');
+      document.getElementById('phone-form').classList.add('hidden');
+      document.getElementById('otp-form').classList.add('hidden');
       document.getElementById('user-info').classList.remove('hidden');
-      document.getElementById('user-phone').innerText = "رقم الحساب: " + user.phoneNumber;
+      document.getElementById('user-details').innerText = user.phoneNumber || user.email;
       document.getElementById('status').innerText = "";
     } else {
-      document.getElementById('phone-step').classList.remove('hidden');
-      document.getElementById('otp-step').classList.add('hidden');
+      document.getElementById('auth-options').classList.remove('hidden');
       document.getElementById('user-info').classList.add('hidden');
     }
   });
 
-  // إرسال الرمز
-  document.getElementById('send-otp-btn').addEventListener('click', () => {
-    const phoneNumber = document.getElementById('phoneNumber').value.trim();
-    const statusDiv = document.getElementById('status');
-    
-    if(!phoneNumber) { 
-      statusDiv.innerText = "يرجى إدخال رقم الهاتف"; 
-      return; 
-    }
-    
-    statusDiv.innerText = "جاري إرسال الرمز...";
-
-    signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
-      .then((result) => {
-        confirmationResult = result;
-        statusDiv.innerText = "تم إرسال الرمز بنجاح!";
-        document.getElementById('phone-step').classList.add('hidden');
-        document.getElementById('otp-step').classList.remove('hidden');
-      })
-      .catch((error) => {
-        statusDiv.innerText = "خطأ: " + error.message;
-      });
-  });
-
-  // التأكيد والتحقق
-  document.getElementById('verify-otp-btn').addEventListener('click', () => {
-    const code = document.getElementById('otpCode').value.trim();
-    const statusDiv = document.getElementById('status');
-    
-    if(!code) { 
-      statusDiv.innerText = "أدخل الرمز أولاً"; 
-      return; 
-    }
-    
-    statusDiv.innerText = "جاري التحقق...";
-
-    confirmationResult.confirm(code).then(() => {
-      statusDiv.innerText = "تم التفعيل بنجاح!";
-    }).catch(() => {
-      statusDiv.innerText = "الرمز غير صحيح، حاول مجدداً.";
+  // تسجيل الدخول بواسطة Google
+  document.getElementById('google-login-btn').addEventListener('click', () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider).catch(err => {
+      document.getElementById('status').innerText = "خطأ Google: " + err.message;
     });
   });
 
-  // تسجيل الخروج
-  document.getElementById('logout-btn').addEventListener('click', () => {
-    signOut(auth);
+  // إظهار نموذج رقم الهاتف
+  document.getElementById('show-phone-btn').addEventListener('click', () => {
+    document.getElementById('auth-options').classList.add('hidden');
+    document.getElementById('phone-form').classList.remove('hidden');
   });
+
+  document.getElementById('back-btn').addEventListener('click', () => {
+    document.getElementById('phone-form').classList.add('hidden');
+    document.getElementById('auth-options').classList.remove('hidden');
+  });
+
+  // إرسال الرمز لرقم الهاتف
+  document.getElementById('send-otp-btn').addEventListener('click', () => {
+    const phoneNumber = document.getElementById('phoneNumber').value.trim();
+    const statusDiv = document.getElementById('status');
+    if(!phoneNumber) { statusDiv.innerText = "يرجى إدخال الرقم"; return; }
+
+    statusDiv.innerText = "جاري إرسال الرمز...";
+    signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
+      .then((result) => {
+        confirmationResult = result;
+        statusDiv.innerText = "تم إرسال الرمز!";
+        document.getElementById('phone-form').classList.add('hidden');
+        document.getElementById('otp-form').classList.remove('hidden');
+      })
+      .catch(err => statusDiv.innerText = "خطأ: " + err.message);
+  });
+
+  // تأكيد الرمز
+  document.getElementById('verify-otp-btn').addEventListener('click', () => {
+    const code = document.getElementById('otpCode').value.trim();
+    confirmationResult.confirm(code)
+      .then(() => document.getElementById('status').innerText = "تم الدخول بنجاح!")
+      .catch(() => document.getElementById('status').innerText = "الرمز غير صحيح.");
+  });
+
+  // تسجيل الخروج
+  document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بدّلها - تسجيل الدخول</title>
+  <style>
+    :root {
+      --bg-color: #12191b;
+      --card-bg: #1a2326;
+      --teal-color: #2db39b;
+      --yellow-color: #f5a623;
+      --text-white: #ffffff;
+      --text-gray: #9ba8ac;
+    }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-white);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    .container {
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+    .top-tag {
+      color: var(--text-gray);
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+    .logo {
+      font-size: 42px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .logo span.yellow { color: var(--yellow-color); }
+    .logo span.teal { color: var(--teal-color); }
+    .sub-title {
+      color: var(--text-gray);
+      font-size: 15px;
+      margin-bottom: 30px;
+    }
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: 0.2s;
+    }
+    .btn-google {
+      background-color: var(--teal-color);
+      color: white;
+    }
+    .btn-phone {
+      background-color: #243135;
+      color: white;
+      border: 1px solid #36484e;
+    }
+    .btn:hover { opacity: 0.9; }
+    
+    .info-card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 20px;
+      text-align: right;
+      border: 1px solid #233034;
+    }
+    .info-card h4 {
+      margin: 0 0 10px 0;
+      font-size: 15px;
+    }
+    .info-card ul {
+      margin: 0;
+      padding-right: 18px;
+      color: var(--text-gray);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .guest-link {
+      display: block;
+      margin-top: 25px;
+      color: var(--teal-color);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* Modal / Form styles for Phone OTP */
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #36484e;
+      background: #202b2e;
+      color: #fff;
+      text-align: center;
+      direction: ltr;
+      box-sizing: border-box;
+      font-size: 15px;
+    }
+    .hidden { display: none; }
+    #status { margin-top: 15px; color: var(--teal-color); font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="top-tag">بيع · شراء · مجاناً</div>
+  
+  <!-- Logo -->
+  <div class="logo">
+    <span class="yellow">بدّ</span><span class="teal">لها</span>
+  </div>
+  <div class="sub-title">سجّل دخولك حتى تنشر وتتواصل بأمان</div>
+
+  <!-- خيارات تسجيل الدخول -->
+  <div id="auth-options">
+    <button class="btn btn-google" id="google-login-btn">
+      المتابعة مع Google
+    </button>
+    
+    <button class="btn btn-phone" id="show-phone-btn">
+      المتابعة برقم الهاتف 📱
+    </button>
+  </div>
+
+  <!-- نموذج إدخال رقم الهاتف (يظهر عند الضغط على زر الهاتف) -->
+  <div id="phone-form" class="hidden">
+    <input type="tel" id="phoneNumber" placeholder="+9647700000000" value="+9647700000000">
+    <div id="recaptcha-container"></div>
+    <button class="btn btn-google" id="send-otp-btn">إرسال رمز التحقق</button>
+    <button class="btn btn-phone" id="back-btn">إلغاء</button>
+  </div>
+
+  <!-- نموذج إدخال رمز التحقق OTP -->
+  <div id="otp-form" class="hidden">
+    <p style="color: var(--text-gray); font-size: 14px;">أدخل الرمز المكون من 6 أرقام</p>
+    <input type="number" id="otpCode" placeholder="123456">
+    <button class="btn btn-google" id="verify-otp-btn">تأكيد الرمز</button>
+  </div>
+
+  <!-- الشاشة بعد نجاح تسجيل الدخول -->
+  <div id="user-info" class="hidden">
+    <h3 style="color: #4ade80;">تم تسجيل الدخول بنجاح! 🎉</h3>
+    <p id="user-details" style="color: var(--text-gray);"></p>
+    <button class="btn" style="background:#ef4444; color:white;" id="logout-btn">تسجيل الخروج</button>
+  </div>
+
+  <div id="status"></div>
+
+  <!-- بطاقة معلومات الحماية -->
+  <div class="info-card">
+    <h4>🛡️ ليش حسابك محمي؟</h4>
+    <ul>
+      <li>ما نخزن كلمات مرور أبداً</li>
+      <li>الدخول عبر حساب Google أو رقم هاتفك ومعهم حمايته</li>
+      <li>كل إعلان مربوط بحساب صاحبه، ولا أحد يقدر يعدله أو يحذفه غيره</li>
+    </ul>
+  </div>
+
+  <a href="#" class="guest-link">تصفّح كزائر</a>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { 
+    getAuth, 
+    GoogleAuthProvider, 
+    signInWithPopup, 
+    RecaptchaVerifier, 
+    signInWithPhoneNumber, 
+    signOut, 
+    onAuthStateChanged 
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCcRPDzPu61SvMczifLNxHg7YCDqr6lZ-k",
+    authDomain: "badliha.firebaseapp.com",
+    projectId: "badliha",
+    storageBucket: "badliha.firebasestorage.app",
+    messagingSenderId: "679423675521",
+    appId: "1:679423675521:web:0820d5c624319ad4f05180"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  auth.languageCode = 'ar';
+
+  let confirmationResult = null;
+
+  window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+    'size': 'invisible'
+  });
+
+  // متابعة حالة المستخدم
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.getElementById('auth-options').classList.add('hidden');
+      document.getElementById('phone-form').classList.add('hidden');
+      document.getElementById('otp-form').classList.add('hidden');
+      document.getElementById('user-info').classList.remove('hidden');
+      document.getElementById('user-details').innerText = user.phoneNumber || user.email;
+      document.getElementById('status').innerText = "";
+    } else {
+      document.getElementById('auth-options').classList.remove('hidden');
+      document.getElementById('user-info').classList.add('hidden');
+    }
+  });
+
+  // تسجيل الدخول بواسطة Google
+  document.getElementById('google-login-btn').addEventListener('click', () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider).catch(err => {
+      document.getElementById('status').innerText = "خطأ Google: " + err.message;
+    });
+  });
+
+  // إظهار نموذج رقم الهاتف
+  document.getElementById('show-phone-btn').addEventListener('click', () => {
+    document.getElementById('auth-options').classList.add('hidden');
+    document.getElementById('phone-form').classList.remove('hidden');
+  });
+
+  document.getElementById('back-btn').addEventListener('click', () => {
+    document.getElementById('phone-form').classList.add('hidden');
+    document.getElementById('auth-options').classList.remove('hidden');
+  });
+
+  // إرسال الرمز لرقم الهاتف
+  document.getElementById('send-otp-btn').addEventListener('click', () => {
+    const phoneNumber = document.getElementById('phoneNumber').value.trim();
+    const statusDiv = document.getElementById('status');
+    if(!phoneNumber) { statusDiv.innerText = "يرجى إدخال الرقم"; return; }
+
+    statusDiv.innerText = "جاري إرسال الرمز...";
+    signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
+      .then((result) => {
+        confirmationResult = result;
+        statusDiv.innerText = "تم إرسال الرمز!";
+        document.getElementById('phone-form').classList.add('hidden');
+        document.getElementById('otp-form').classList.remove('hidden');
+      })
+      .catch(err => statusDiv.innerText = "خطأ: " + err.message);
+  });
+
+  // تأكيد الرمز
+  document.getElementById('verify-otp-btn').addEventListener('click', () => {
+    const code = document.getElementById('otpCode').value.trim();
+    confirmationResult.confirm(code)
+      .then(() => document.getElementById('status').innerText = "تم الدخول بنجاح!")
+      .catch(() => document.getElementById('status').innerText = "الرمز غير صحيح.");
+  });
+
+  // تسجيل الخروج
+  document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
 </script>
 
 </body>
