@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>بدّلها</title>
+<meta name="theme-color" content="#0F5C5A">
+<link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js")</script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F1F5F4;--card:#fff;--ink:#14302F;--mut:#6B7F7E;--pri:#0F5C5A;--acc:#F2A900;--free:#1FA971;--line:#DCE5E3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1A1A;--card:#162626;--ink:#EAF2F1;--mut:#92A8A6;--pri:#3FB5AE;--line:#264040}}
+:root[data-theme="dark"]{--bg:#0E1A1A;--card:#162626;--ink:#EAF2F1;--mut:#92A8A6;--pri:#3FB5AE;--line:#264040}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:Cairo,Tahoma,sans-serif;display:flex;flex-direction:column;max-width:560px;margin:auto}
+button,input,select,textarea{font:inherit;color:inherit}
+header{padding:12px 16px 8px;display:flex;align-items:center;gap:10px}
+.logo{font-weight:800;font-size:26px;color:var(--pri);letter-spacing:-.5px}
+.logo i{font-style:normal;color:var(--acc)}
+main{flex:1;overflow-y:auto;padding:0 16px 16px}
+nav{display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;border:0;background:none;padding:9px 0 7px;font-size:11px;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:1px}
+nav button span{font-size:20px}
+nav button.on{color:var(--pri);font-weight:800}
+nav .plus span{background:var(--acc);color:#1b1400;border-radius:50%;width:38px;height:38px;display:grid;place-items:center;font-weight:800;margin-top:-14px;font-size:24px}
+input,select,textarea{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);margin-bottom:10px}
+textarea{min-height:80px}
+.chips{display:flex;gap:7px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.chip{flex:none;padding:6px 13px;border-radius:99px;border:1.5px solid var(--line);background:var(--card);font-size:13px;cursor:pointer}
+.chip.on{background:var(--pri);border-color:var(--pri);color:#fff}
+.row{display:flex;gap:8px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ad{background:var(--card);border-radius:16px;overflow:hidden;border:1px solid var(--line);cursor:pointer;position:relative}
+.ph{aspect-ratio:1/0.85;display:grid;place-items:center;font-size:46px;background-size:cover;background-position:center}
+.ad .b{padding:9px 11px 11px}
+.ad h3{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.price{font-weight:800;color:var(--pri);font-size:15px}
+.price.free{color:var(--free)}
+.meta{font-size:12px;color:var(--mut)}
+.tag{position:absolute;top:8px;right:8px;background:var(--free);color:#fff;font-size:11px;font-weight:800;padding:2px 9px;border-radius:99px}
+.fav{position:absolute;top:6px;left:6px;background:rgba(255,255,255,.9);border:0;border-radius:50%;width:32px;height:32px;font-size:16px;color:#d33}
+.btn{width:100%;padding:13px;border:0;border-radius:14px;background:var(--pri);color:#fff;font-weight:800;font-size:15px;cursor:pointer}
+.btn.alt{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}
+.btn.red{background:none;color:#c0392b;border:0;font-size:13px;font-weight:600}
+.back{border:0;background:none;color:var(--pri);font-weight:800;padding:6px 0 10px;font-size:15px}
+.big{aspect-ratio:1/0.8;border-radius:18px;display:grid;place-items:center;font-size:90px;background-size:cover;background-position:center;margin-bottom:12px}
+h2{font-size:20px;margin:4px 0}
+.empty{text-align:center;color:var(--mut);padding:50px 20px;line-height:1.9}
+.empty b{display:block;font-size:42px}
+.msgs{display:flex;flex-direction:column;gap:7px;margin:10px 0}
+.m{max-width:78%;padding:9px 13px;border-radius:16px;font-size:14px;background:var(--card);border:1px solid var(--line)}
+.m.me{align-self:flex-start;background:var(--pri);color:#fff;border-color:var(--pri)}
+.m.th{align-self:flex-end}
+.seg{display:flex;background:var(--line);border-radius:12px;padding:3px;margin-bottom:10px}
+.seg button{flex:1;border:0;background:none;padding:9px;border-radius:10px;font-weight:600;color:var(--mut)}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;font-size:14px;z-index:9}
+.li{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px;margin-bottom:9px;cursor:pointer}
+.li .ph{width:58px;aspect-ratio:1;font-size:28px;border-radius:10px;flex:none}
+.li div:last-child{flex:1;min-width:0}
+.ad.boost{border:2px solid var(--acc)}
+.li.sel{border:2px solid var(--acc)}
+.safe{background:#FFF4D6;color:#5a4300;border-radius:12px;padding:8px 12px;font-size:12.5px;margin-bottom:8px}
+</style>
+</head>
+<body>
+<header><div class="logo">بدّل<i>ها</i></div><div class="meta" style="margin-inline-start:auto">بيع · شراء · مجاناً</div></header>
+<main id="app"></main>
+<nav id="nav"></nav>
+<div id="rc"></div>
+<script src="https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-app-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-auth-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/firebase@10.12.2/firebase-firestore-compat.js"></script>
+<script>
+
+firebase.initializeApp({apiKey:"AIzaSyCcRPDzPu61SvMczifLNxHg7YCDqr6lZ-k",authDomain:"badliha.firebaseapp.com",projectId:"badliha",storageBucket:"badliha.firebasestorage.app",messagingSenderId:"679423675521",appId:"1:679423675521:web:0820d5c624319ad4f05180"});
+const auth=firebase.auth(),db=firebase.firestore();
+const ZAIN="07XXXXXXXXX"; // <-- حط رقم زين كاش مالك هنا
+const CATS=[["كل التصنيفات","✨"],["أثاث","🛋️"],["إلكترونيات","📱"],["ملابس","👕"],["أطفال","🧸"],["كتب","📚"],["أجهزة منزلية","🧺"],["أخرى","📦"]];
+const CITIES=["بغداد","البصرة","أربيل","الموصل","النجف","كربلاء","السليمانية","كركوك"];
+const COL=["#CFE8E4","#F7E3B5","#E6D9F2","#FAD4D0","#D5E6F7","#DDEBC8"];
+const PL=[[1,3000,"يوم واحد"],[3,7000,"3 أيام"],[7,12000,"أسبوع كامل · الأوفر"]];
+let user=null,ads=[],favs=[],chats=[],msgs=[],uC=null,uM=null;
+let S={sort:"new",tab:"home",cat:0,city:"",type:"all",q:"",open:null,chat:null,cm:null,boost:null,plan:1,ready:false,loaded:false,draft:{type:"sell",img:""}};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hs=s=>[...String(s)].reduce((h,c)=>h+c.charCodeAt(0),0);
+const okImg=a=>/^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(a.img||"");
+const ico=a=>(CATS.find(c=>c[0]==a.c)||[0,"📦"])[1];
+const bg=a=>okImg(a)?`background-image:url(${a.img})`:`background:${COL[hs(a.id||"0")%COL.length]}`;
+const pr=a=>a.p>0?`${Number(a.p).toLocaleString("en")} د.ع`:"مجاني";
+const boosted=a=>!!(a.boost&&a.boost>Date.now());
+const mine=a=>user&&a.uid==user.uid;
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
+function upd(){const e=document.activeElement;if(S.tab=="add"||(e&&/INPUT|TEXTAREA|SELECT/.test(e.tagName)))return;render()}
+auth.onAuthStateChanged(u=>{
+ if(uC){uC();uC=null}
+ user=u?{uid:u.uid,name:u.displayName||("مستخدم "+String(u.phoneNumber||"").slice(-4)),email:u.email}:null;favs=[];chats=[];
+ if(u){db.collection("users").doc(u.uid).get().then(d=>{favs=d.exists?(d.data().favs||[]):[];upd()}).catch(()=>{});
+  uC=db.collection("chats").where("users","array-contains",u.uid).onSnapshot(s=>{chats=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.ts-a.ts);upd()},()=>{})}
+ if(u&&S.tab=="login"){S.tab=S.after||"home";S.after=null;S.step=0}
+ S.ready=true;render()});
+db.collection("ads").orderBy("ts","desc").limit(200).onSnapshot(s=>{ads=s.docs.map(d=>({id:d.id,...d.data()}));S.loaded=true;upd()},e=>{S.loaded=true;toast("تعذّر تحميل الإعلانات: "+e.code);upd()});
+function need(){if(user)return true;S.after=S.tab=="login"?S.after:S.tab;S.tab="login";render();return false}
+function go(t){S.boost=null;closeChat(true);if(t!="home"&&!user){S.after=t;S.tab="login";S.open=null;render();return}S.tab=t;S.open=null;render()}
+function signin(){const p=new firebase.auth.GoogleAuthProvider();auth.signInWithPopup(p).catch(e=>{if(e.code=="auth/popup-blocked"||e.code=="auth/operation-not-supported-in-this-environment")auth.signInWithRedirect(p);else if(!/closed|cancelled/.test(e.code))toast("تعذّر الدخول: "+e.code)})}
+function out(){S.step=0;auth.signOut();S.tab="home";S.open=null;render()}
+function fl(){return ads.filter(a=>(!S.cat||a.c==CATS[S.cat][0])&&(!S.city||a.city==S.city)&&(S.type=="all"||(S.type=="free")==(a.p==0))&&(!S.q||((a.t||"")+(a.d||"")).includes(S.q))).sort((a,b)=>boosted(b)-boosted(a)||(S.sort=="low"?a.p-b.p:0))}
+function card(a){return `<div class="ad ${boosted(a)?"boost":""}" onclick="S.open='${a.id}';render()"><div class="ph" style="${bg(a)}">${okImg(a)?"":ico(a)}</div>${a.p==0?'<span class="tag">مجاني</span>':""}<button class="fav" onclick="event.stopPropagation();fav('${a.id}')">${favs.includes(a.id)?"♥":"♡"}</button><div class="b"><h3>${boosted(a)?"⭐ ":""}${esc(a.t)}</h3><div class="price ${a.p==0?"free":""}">${pr(a)}</div><div class="meta">${esc(a.city)}</div></div></div>`}
+function list(l){if(!S.loaded)return `<div class="empty"><b>⏳</b>جاري التحميل...</div>`;return l.length?`<div class="grid">${l.map(card).join("")}</div>`:`<div class="empty"><b>🔍</b>ما لقينا إعلانات.<br>كن أول من ينشر!</div>`}
+function sq(){$("#list").innerHTML=list(fl())}
+function home(){return `<input id="q" placeholder="ابحث عن غرض..." value="${esc(S.q)}" oninput="S.q=this.value;sq()">
+<div class="chips">${CATS.map((c,i)=>`<div class="chip ${S.cat==i?"on":""}" onclick="S.cat=${i};render()">${c[1]} ${c[0]}</div>`).join("")}</div>
+<div class="row"><select onchange="S.city=this.value;render()"><option value="">كل المدن</option>${CITIES.map(c=>`<option ${S.city==c?"selected":""}>${c}</option>`).join("")}</select>
+<select onchange="S.type=this.value;render()"><option value="all">الكل</option><option value="free" ${S.type=="free"?"selected":""}>مجاني فقط</option><option value="sell" ${S.type=="sell"?"selected":""}>للبيع فقط</option></select>
+<select style="max-width:105px" onchange="S.sort=this.value;render()"><option value="new">الأحدث</option><option value="low" ${S.sort=="low"?"selected":""}>الأرخص</option></select></div>
+<div id="list">${list(fl())}</div>`}
+function fav(id){if(!need())return;favs=favs.includes(id)?favs.filter(x=>x!=id):[...favs,id];db.collection("users").doc(user.uid).set({favs},{merge:true}).catch(()=>toast("تعذّر الحفظ"));render()}
+function favsV(){const l=ads.filter(a=>favs.includes(a.id));return `<h2 style="margin-bottom:10px">المفضلة</h2>`+(l.length?`<div class="grid">${l.map(card).join("")}</div>`:`<div class="empty"><b>♡</b>ما حفظت شي بعد.<br>اضغط القلب على أي إعلان.</div>`)}
+function detail(){const a=ads.find(x=>x.id==S.open);if(!a){S.open=null;return home()}
+return `<button class="back" onclick="S.open=null;render()">‹ رجوع</button>
+<div class="big" style="${bg(a)}">${okImg(a)?"":ico(a)}</div>
+<div class="row" style="align-items:center"><h2 style="flex:1">${esc(a.t)}</h2><button class="fav" style="position:static" onclick="fav('${a.id}')">${favs.includes(a.id)?"♥":"♡"}</button></div>
+<div class="price ${a.p==0?"free":""}" style="font-size:22px;margin-bottom:4px">${pr(a)}</div>
+<div class="meta" style="margin-bottom:12px">${ico(a)} ${esc(a.c)} · 📍 ${esc(a.city)} · 👤 ${esc(a.by)}</div>
+<p style="line-height:1.9;margin-bottom:16px">${esc(a.d)}</p>
+${mine(a)?`${boosted(a)?'<div class="meta" style="margin-bottom:8px">⭐ إعلانك مميز حالياً</div>':""}<button class="btn" style="margin-bottom:6px" onclick="S.boost='${a.id}';render()">🚀 روّج إعلانك</button><button class="btn red" onclick="del('${a.id}')">🗑️ حذف إعلاني</button>`:`<button class="btn" onclick="startChat('${a.id}')">${a.p==0?"اطلبه مجاناً":"تواصل مع البائع"}</button><button class="btn red" style="margin-top:6px" onclick="report('${a.id}')">🚩 الإبلاغ عن الإعلان</button>`}`}
+function del(id){if(!confirm("حذف الإعلان؟"))return;db.collection("ads").doc(id).delete().then(()=>{S.open=null;toast("تم الحذف")}).catch(()=>toast("تعذّر الحذف"))}
+function report(id){if(!need())return;db.collection("reports").add({adId:id,uid:user.uid,ts:Date.now()}).then(()=>toast("تم إرسال البلاغ للمراجعة")).catch(()=>toast("تعذّر الإرسال"))}
+async function startChat(id){if(!need())return;const a=ads.find(x=>x.id==id),cid=id+"_"+user.uid;
+ try{await db.collection("chats").doc(cid).set({adId:id,adTitle:a.t,users:[a.uid,user.uid],buyer:user.uid,names:{[a.uid]:a.by,[user.uid]:user.name},ts:Date.now()},{merge:true})}catch(e){return toast("تعذّر فتح المحادثة: "+e.code)}
+ openChat(cid,{adTitle:a.t,names:{[a.uid]:a.by},users:[a.uid,user.uid]})}
+function openChat(cid,meta){closeChat(true);S.chat=cid;S.cm=meta||chats.find(c=>c.id==cid)||{};msgs=[];
+ uM=db.collection("chats").doc(cid).collection("msgs").orderBy("ts").onSnapshot(s=>{msgs=s.docs.map(d=>d.data());const el=$("#ms");if(el){el.innerHTML=mh();$("#app").scrollTop=1e6}},()=>toast("تعذّر تحميل الرسائل"));render()}
+function closeChat(q){if(uM){uM();uM=null}S.chat=null;if(!q)render()}
+const mh=()=>msgs.length?msgs.map(x=>`<div class="m ${x.uid==user.uid?"me":"th"}">${esc(x.t)}</div>`).join(""):`<div class="empty">ابدأ المحادثة، مثلاً: "هل الغرض متوفر؟"</div>`;
+function chatV(){const o=(S.cm.users||[]).find(x=>x!=user.uid),n=(S.cm.names||{})[o]||"محادثة";
+return `<button class="back" onclick="closeChat()">‹ رجوع</button><div class="li" style="cursor:default"><div class="ph" style="background:${COL[0]}">💬</div><div><b>${esc(n)}</b><div class="meta">${esc(S.cm.adTitle||"")}</div></div></div>
+<div class="safe">🛡️ نصيحة أمان: قابل البائع بمكان عام، وما تحوّل فلوس قبل ما تعاين الغرض.</div>
+<div class="msgs" id="ms">${mh()}</div>
+<div class="row"><input id="mi" placeholder="اكتب رسالة..." onkeydown="if(event.key=='Enter')send()"><button class="btn" style="width:80px;margin-bottom:10px" onclick="send()">إرسال</button></div>`}
+async function send(){const i=$("#mi"),t=i.value.trim().slice(0,1000);if(!t)return;i.value="";const c=db.collection("chats").doc(S.chat);
+ try{await c.collection("msgs").add({uid:user.uid,t,ts:Date.now()});await c.update({last:t,ts:Date.now()})}catch(e){toast("تعذّر الإرسال: "+e.code)}}
+function msgsV(){if(S.chat)return chatV();return `<h2 style="margin-bottom:10px">رسائلي</h2>`+(chats.length?chats.map(c=>{const o=c.users.find(x=>x!=user.uid);return `<div class="li" onclick="openChat('${c.id}')"><div class="ph" style="background:${COL[hs(c.id)%6]}">💬</div><div><b>${esc((c.names||{})[o]||"مستخدم")}</b><div class="meta" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(c.adTitle)} · ${esc(c.last||"")}</div></div></div>`}).join(""):`<div class="empty"><b>💬</b>ما عندك محادثات بعد.<br>افتح إعلان واضغط "تواصل".</div>`)}
+function addV(){const d=S.draft;
+return `<h2 style="margin-bottom:10px">إعلان جديد</h2>
+<div class="seg"><button class="${d.type=="sell"?"on":""}" onclick="keep();S.draft.type='sell';render()">💰 للبيع</button><button class="${d.type=="free"?"on":""}" onclick="keep();S.draft.type='free';render()">🎁 مجاني</button></div>
+<label class="btn alt" style="display:block;text-align:center;margin-bottom:10px;cursor:pointer">${d.img?"✅ تمت إضافة الصورة (اضغط للتغيير)":"📷 أضف صورة"}<input type="file" accept="image/*" hidden onchange="pic(this)"></label>
+<input id="t" maxlength="100" placeholder="عنوان الإعلان" value="${esc(d.t||"")}">
+<textarea id="d" maxlength="1000" placeholder="وصف الغرض وحالته">${esc(d.d||"")}</textarea>
+<div class="row"><select id="c">${CATS.slice(1).map(c=>`<option ${d.c==c[0]?"selected":""}>${c[0]}</option>`).join("")}</select><select id="ci">${CITIES.map(c=>`<option ${d.ci==c?"selected":""}>${c}</option>`).join("")}</select></div>
+${d.type=="sell"?`<input id="p" type="number" inputmode="numeric" placeholder="السعر بالدينار" value="${d.p||""}">`:""}
+<button class="btn" id="pb" onclick="pub()">نشر الإعلان</button>`}
+function keep(){const g=i=>$("#"+i)?.value;if(!$("#t"))return;Object.assign(S.draft,{t:g("t"),d:g("d"),c:g("c"),ci:g("ci"),p:g("p")})}
+function pic(i){const f=i.files[0];if(!f)return;keep();const r=new FileReader();r.onload=e=>{const im=new Image();im.onload=()=>{const k=Math.min(1,500/im.width),c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);S.draft.img=c.toDataURL("image/jpeg",.7);render()};im.src=e.target.result};r.readAsDataURL(f)}
+async function pub(){if(!need())return;keep();const d=S.draft;if(!d.t?.trim())return toast("اكتب عنوان الإعلان");if(d.type=="sell"&&!(+d.p>0))return toast("حدد السعر");
+ $("#pb").disabled=true;
+ try{await db.collection("ads").add({t:d.t.trim().slice(0,100),c:d.c||CATS[1][0],city:d.ci||CITIES[0],p:d.type=="free"?0:+d.p,d:(d.d||"").slice(0,1000),img:d.img||"",by:user.name,uid:user.uid,ts:Date.now()});
+  S.draft={type:"sell",img:""};toast("تم نشر إعلانك 🎉");S.tab="home";render()}catch(e){toast("تعذّر النشر: "+e.code);$("#pb").disabled=false}}
+function boostV(){const a=ads.find(x=>x.id==S.boost);if(!a){S.boost=null;return home()}const p=PL[S.plan];
+return `<button class="back" onclick="S.boost=null;render()">‹ رجوع</button><h2>🚀 روّج إعلانك</h2><div class="meta" style="margin-bottom:12px">${esc(a.t)}</div>
+<div class="li" style="cursor:default;display:block;line-height:1.9">⭐ يظهر أول القائمة<br>🟡 إطار وشارة "مميز"<br>👀 مشاهدات أكثر</div>
+${PL.map((x,k)=>`<div class="li ${S.plan==k?"sel":""}" onclick="S.plan=${k};render()"><div><b>${x[2]}</b></div><div class="price" style="flex:none">${x[1].toLocaleString("en")} د.ع</div></div>`).join("")}
+<div class="safe" style="line-height:1.9">1) حوّل <b>${p[1].toLocaleString("en")} د.ع</b> عبر زين كاش للرقم <b dir="ltr">${ZAIN}</b><br>2) اكتب عنوان إعلانك بملاحظة التحويل<br>3) اضغط "تم التحويل" ونفعّل إعلانك بأسرع وقت</div>
+<button class="btn" onclick="reqBoost('${a.id}')">تم التحويل، فعّل إعلاني</button>`}
+function reqBoost(id){const p=PL[S.plan];db.collection("boostReqs").add({adId:id,uid:user.uid,name:user.name,days:p[0],price:p[1],ts:Date.now()}).then(()=>{S.boost=null;toast("وصلنا طلبك، نفعّله بعد التأكد من التحويل");render()}).catch(()=>toast("تعذّر إرسال الطلب"))}
+let rcv=null,conf=null;
+function perrMsg(e){const m={"auth/invalid-phone-number":"رقم الهاتف غير صحيح","auth/missing-phone-number":"اكتب رقم الهاتف","auth/too-many-requests":"محاولات كثيرة، انتظر قليلاً ثم أعد المحاولة","auth/operation-not-allowed":"الدخول بالهاتف غير مفعّل بـ Firebase","auth/billing-not-enabled":"إرسال الرسائل يحتاج خطة Blaze بـ Firebase (أو استخدم رقماً تجريبياً)","auth/unauthorized-domain":"الرابط غير مضاف بـ Authorized domains","auth/captcha-check-failed":"فشل التحقق من reCAPTCHA، أعد المحاولة","auth/invalid-verification-code":"الرمز غير صحيح","auth/code-expired":"انتهت صلاحية الرمز، اطلب رمزاً جديداً","auth/quota-exceeded":"تجاوزت حصة الرسائل","auth/network-request-failed":"تحقق من الإنترنت"};return (m[e.code]||"تعذّر الإرسال")+" ("+(e.code||e.message)+")"}
+function sendCode(){const nm=$("#nm").value.trim(),raw=$("#ph").value;S.pn=nm;S.pp=raw;
+ let n=raw.replace(/[\s\-()]/g,"").replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d));
+ if(n.startsWith("00"))n="+"+n.slice(2);else if(n.startsWith("0"))n="+964"+n.slice(1);else if(/^7\d{9}$/.test(n))n="+964"+n;else if(!n.startsWith("+"))n="+"+n;
+ if(!nm){S.perr="اكتب اسمك";return render()}
+ if(!/^\+\d{10,15}$/.test(n)){S.perr="رقم الهاتف غير صحيح";return render()}
+ S.perr=0;$("#sb").disabled=true;
+ try{if(!rcv)rcv=new firebase.auth.RecaptchaVerifier("rc",{size:"invisible"})}catch(e){S.perr=perrMsg(e);return render()}
+ auth.signInWithPhoneNumber(n,rcv).then(c=>{conf=c;S.pf=n;S.step=2;S.perr=0;render()}).catch(e=>{S.perr=perrMsg(e);try{rcv.clear()}catch(x){}rcv=null;render()})}
+function verifyCode(){const c=$("#cd").value.trim();if(!/^\d{6}$/.test(c)){S.perr="اكتب الرمز المكوّن من 6 أرقام";return render()}
+ $("#vb").disabled=true;
+ conf.confirm(c).then(r=>{const u=r.user;if(!u.displayName&&S.pn)return u.updateProfile({displayName:S.pn}).then(()=>{if(user)user.name=S.pn})}).then(()=>{S.step=0;S.perr=0;render()}).catch(e=>{S.perr=perrMsg(e);render()})}
+function loginV(){const head=`<div style="text-align:center;padding:26px 0 8px"><div class="logo" style="font-size:46px">بدّل<i>ها</i></div><p class="meta" style="margin:6px 0 20px">سجّل دخولك حتى تنشر وتتواصل بأمان</p></div>`;
+ const err=S.perr?`<div class="safe" style="background:#FDE3E0;color:#7a1b12">${esc(S.perr)}</div>`:"";
+ if(S.step==1)return head+err+`<input id="nm" placeholder="اسمك (يظهر على إعلاناتك)" value="${esc(S.pn||"")}"><input id="ph" type="tel" inputmode="tel" dir="ltr" placeholder="07XXXXXXXXX" value="${esc(S.pp||"")}"><button class="btn" id="sb" onclick="sendCode()">إرسال رمز التحقق</button><button class="back" style="width:100%" onclick="S.step=0;S.perr=0;render()">‹ رجوع</button>`;
+ if(S.step==2)return head+err+`<div class="meta" style="text-align:center;margin-bottom:10px">أرسلنا رمزاً إلى <b dir="ltr">${esc(S.pf)}</b></div><input id="cd" type="text" inputmode="numeric" dir="ltr" maxlength="6" placeholder="------" style="text-align:center;letter-spacing:6px;font-size:22px"><button class="btn" id="vb" onclick="verifyCode()">تأكيد</button><button class="back" style="width:100%" onclick="S.step=1;S.perr=0;render()">‹ تغيير الرقم</button>`;
+ return head+err+`<button class="btn" style="margin-bottom:9px" onclick="signin()">🟢 المتابعة مع Google</button><button class="btn alt" style="margin-bottom:12px" onclick="S.step=1;S.perr=0;render()">📱 المتابعة برقم الهاتف</button>
+<div class="li" style="cursor:default;display:block;line-height:1.9"><b>🛡️ ليش حسابك محمي؟</b><div class="meta">• ما نخزن كلمات مرور أبداً<br>• الدخول عبر Google أو رمز يوصل لهاتفك<br>• كل إعلان مربوط بحساب صاحبه، ولا أحد يكدر يعدّله أو يحذفه غيره</div></div>
+<button class="back" style="width:100%;margin-top:10px" onclick="S.tab='home';render()">تصفّح كزائر</button>`}
+function prof(){const l=ads.filter(mine);
+return `<h2 style="margin-bottom:10px">حسابي</h2><div class="li" style="cursor:default;margin-bottom:14px"><div class="ph" style="background:#CFE8E4">👤</div><div><b>${esc(user.name)}</b><div class="meta">✅ دخول آمن عبر Google</div></div></div>
+<b>إعلاناتي (${l.length})</b><div style="margin-top:8px">${l.length?l.map(a=>`<div class="li" onclick="S.tab='home';S.open='${a.id}';render()"><div class="ph" style="${bg(a)}">${okImg(a)?"":ico(a)}</div><div><b>${esc(a.t)}</b><div class="price ${a.p==0?"free":""}">${pr(a)}</div></div></div>`).join(""):`<div class="empty">ما نشرت إعلان بعد.</div>`}</div>
+<button class="btn alt" style="margin-top:14px" onclick="out()">تسجيل الخروج</button><button class="btn red" style="margin-top:6px" onclick="delAcc()">حذف حسابي نهائياً</button>`}
+async function delAcc(){if(!confirm("سيتم حذف حسابك وكل إعلاناتك نهائياً. متأكد؟"))return;
+ try{const q=await db.collection("ads").where("uid","==",user.uid).get();await Promise.all(q.docs.map(d=>d.ref.delete()));await db.collection("users").doc(user.uid).delete().catch(()=>{});await auth.currentUser.delete();toast("تم حذف حسابك");S.tab="home"}
+ catch(e){if(e.code=="auth/requires-recent-login"){toast("سجّل دخولك من جديد ثم أعد الحذف");auth.signOut()}else toast("تعذّر الحذف: "+e.code)}}
+function render(){
+const v=!S.ready?`<div class="empty"><b>⏳</b>جاري التحميل...</div>`:S.boost?boostV():S.tab=="login"?loginV():S.tab=="home"?(S.chat?chatV():S.open?detail():home()):S.tab=="add"?addV():S.tab=="favs"?favsV():S.tab=="msgs"?msgsV():prof();
+const k=[S.tab,S.open,S.chat,S.boost].join(),y=$("#app").scrollTop;$("#app").innerHTML=v;
+const T=[["home","🏠","الرئيسية"],["favs","♡","المفضلة"],["add","+","أضف"],["msgs","💬","رسائلي"],["me","👤","حسابي"]];
+$("#nav").innerHTML=T.map(t=>`<button class="${S.tab==t[0]?"on":""} ${t[0]=="add"?"plus":""}" onclick="go('${t[0]}')"><span>${t[1]}</span>${t[2]}</button>`).join("");
+$("#app").scrollTop=S.chat?1e6:(k==S.vk?y:0);S.vk=k}
+render();
+</script>
+</body>
+</html>
